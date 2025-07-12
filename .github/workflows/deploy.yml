@@ -13,20 +13,25 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 
-      - name: 🧪 Install deps and run Playwright tests
+      - name: 🧪 Setup Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: '20'
 
-      - run: npm ci
-      - run: npx playwright install --with-deps
-      - run: npm run test:e2e
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🔧 Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: 🚀 Run E2E tests
+        run: npm run test:e2e
 
       - name: 📦 Archive app for deploy
         run: |
           tar --exclude='node_modules' -czf app.tar.gz .
 
-      - name: 🔐 Copy files to VPS via SCP
+      - name: 🔐 Copy archive to VPS via SCP
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -42,16 +47,30 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
+            set -euo pipefail
+
+            # Przygotuj katalog
             mkdir -p ~/app
             tar -xzf ~/deploy/app.tar.gz -C ~/app
             cd ~/app
 
-            echo "🛑 Stop and remove previous container (if exists)"
-            docker stop nextjs-app || true
-            docker rm nextjs-app || true
+            # Zwolnij miejsce: usuń obrazy starsze niż 24h
+            echo "🧹 Prune unused images older than 24h"
+            docker image prune -a --filter "until=24h" || true
 
-            echo "🐳 Build Docker image with Node 20 Alpine"
-            docker build -t nextjs-app .
+            # Buduj nowy obraz
+            echo "🐳 Building Docker image my-app"
+            docker build -t my-app . || { echo "❌ Build failed"; exit 1; }
 
-            echo "🚀 Run new container"
-            docker run -d -p 20201:3000 --name nextjs-app nextjs-app
+            # Zatrzymaj i usuń stary kontener
+            echo "🛑 Stopping old container my-app-container"
+            docker stop my-app-container 2>/dev/null || true
+            echo "🗑️ Removing old container my-app-container"
+            docker rm my-app-container 2>/dev/null || true
+
+            # Uruchom nowy kontener
+            echo "🚀 Running new container my-app-container on port 20201"
+            docker run -d \
+              --name my-app-container \
+              -p 20201:3000 \
+              my-app
