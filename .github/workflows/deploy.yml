@@ -67,9 +67,9 @@ jobs:
 
             # Zatrzymaj i usuń stary kontener
             echo "🛑 Stopping old container my-app-container"
-            docker stop my-app-container 2>/dev/null || true
+            docker stop next-container 2>/dev/null || true
             echo "🗑️ Removing old container my-app-container"
-            docker rm my-app-container 2>/dev/null || true
+            docker rm next-container 2>/dev/null || true
 
             # Uruchom nowy kontener
             echo "🚀 Running new container my-app-container on port 20201"
