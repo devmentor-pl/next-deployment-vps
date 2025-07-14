@@ -65,6 +65,9 @@ jobs:
             echo "🐳 Building Docker image my-app"
             docker build -t my-app . || { echo "❌ Build failed"; exit 1; }
 
+            # Usuń zawartość /app
+            rm -rf ~/app/*
+
             # Zatrzymaj i usuń stary kontener
             echo "🛑 Stopping old container my-app-container"
             docker stop next-container 2>/dev/null || true
@@ -72,12 +75,8 @@ jobs:
             docker rm next-container 2>/dev/null || true
 
             # Uruchom nowy kontener
-            echo "🚀 Running new container my-app-container on port 20201"
+            echo "🚀 Running new container next-container on port 20201"
             docker run -d \
-              --name my-app-container \
+              --name next-container \
               -p 20201:3000 \
               my-app
-
-             
-            # Usuń zawartość /app
-            rm -rf ~/app/*
