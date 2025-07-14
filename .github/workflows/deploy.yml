@@ -13,19 +13,19 @@ jobs:
       - name: ⬇️ Checkout repo
         uses: actions/checkout@v3
 
-      - name: 🧪 Setup Node.js 20
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+      # - name: 🧪 Setup Node.js 20
+      #   uses: actions/setup-node@v3
+      #   with:
+      #     node-version: '20'
 
-      - name: 📦 Install dependencies
-        run: npm ci
+      # - name: 📦 Install dependencies
+      #   run: npm ci
 
-      - name: 🔧 Install Playwright browsers
-        run: npx playwright install --with-deps
+      # - name: 🔧 Install Playwright browsers
+      #   run: npx playwright install --with-deps
 
-      - name: 🚀 Run E2E tests
-        run: echo "Brak testów - pomijam krok"
+      # - name: 🚀 Run E2E tests
+      #   run: echo "Brak testów - pomijam krok"
 
       - name: 📦 Archive app for deploy
         run: |
