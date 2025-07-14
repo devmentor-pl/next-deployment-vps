@@ -40,7 +40,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "archive/app.tar.gz"
-          target: "~/deploy"
+          target: "~/actions/app.tar.gz"
 
       - name: 🚀 Deploy on VPS via SSH
         uses: appleboy/ssh-action@v0.1.10
@@ -53,7 +53,7 @@ jobs:
 
             # Przygotuj katalog
             mkdir -p ~/app
-            tar -xzf ~/app.tar.gz -C ~/app
+            tar -xzf ~/actions/app.tar.gz -C ~/app
             cd ~/app
 
             # Zwolnij miejsce: usuń obrazy starsze niż 24h
