@@ -36,6 +36,7 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "app.tar.gz"
           target: "~/deploy"
@@ -45,9 +46,9 @@ jobs:
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
+          port: ${{ secrets.VPS_PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
-            set -euo pipefail
 
             # Przygotuj katalog
             mkdir -p ~/app
