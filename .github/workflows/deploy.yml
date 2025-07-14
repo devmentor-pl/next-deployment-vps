@@ -38,7 +38,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           port: ${{ secrets.VPS_PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "app.tar.gz"
+          source: "../app.tar.gz"
           target: "~/deploy"
 
       - name: 🚀 Deploy on VPS via SSH
