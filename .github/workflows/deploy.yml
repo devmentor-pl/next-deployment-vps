@@ -40,7 +40,7 @@ jobs:
           port: ${{ secrets.VPS_PORT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "archive/app.tar.gz"
-          target: "~/actions/app.tar.gz"
+          target: "~/actions"
 
       - name: 🚀 Deploy on VPS via SSH
         uses: appleboy/ssh-action@v0.1.10
